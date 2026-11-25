@@ -10,9 +10,9 @@
   <title>Staff · Summer Reading Challenge</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <script src="./config.js"></script>
-  <script type="module" crossorigin src="./assets/admin-D1lKQBL1.js"></script>
+  <script type="module" crossorigin src="./assets/admin-CuT92xGX.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-XKyaHtl9.js">
-  <link rel="modulepreload" crossorigin href="./assets/config-CedhItam.js">
+  <link rel="modulepreload" crossorigin href="./assets/config-CAhf_UZq.js">
   <link rel="modulepreload" crossorigin href="./assets/events-DT37tjUp.js">
   <link rel="modulepreload" crossorigin href="./assets/island-geo-BVX2xn_M.js">
   <link rel="stylesheet" crossorigin href="./assets/config-xBhfDG-8.css">
@@ -565,11 +565,13 @@
         <div class="card-head"><h3>Translation spreadsheet</h3></div>
         <p class="note">A spreadsheet of everything kids and the TV can show: all the wording below, plus the bingo boards, news, events, badges, Kimi’s stops,
           bonus reasons, prize names and where events are. Just two columns: the English, and the <strong>te reo Māori</strong> (filled in where there is some already).
-          Give it to a fluent speaker (it opens in Excel or Google Sheets), then upload it here. Each row is matched by its English, and you’ll see every change before anything is saved.</p>
+          Give it to a fluent speaker: it opens in Excel, Google Sheets or Numbers, with a “How to” tab that explains everything. Then upload it here (Excel or CSV).
+          Each row is matched by its English, and you’ll see every change before anything is saved.</p>
         <div class="input-row">
           <button id="wordingDownload" class="btn btn-small" type="button">Download spreadsheet</button>
           <label class="btn btn-small btn-sea file-btn">Upload filled spreadsheet
-            <input id="wordingUpload" type="file" accept=".csv,text/csv,.txt,text/plain" class="sr-only" /></label>
+            <input id="wordingUpload" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.csv,text/csv,.txt,text/plain" class="sr-only" /></label>
+          <button id="wordingDownloadCsv" class="link-btn" type="button">or download as CSV</button>
         </div>
         <p id="wordingSheetMessage" class="message ok" role="status"></p>
       </div>
