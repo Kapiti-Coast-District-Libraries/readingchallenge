@@ -1,0 +1,1 @@
+window.SRC_CONFIG = {"supabaseUrl":"https://mbyndfvtnefotnabolfc.supabase.co","supabaseAnonKey":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ieW5kZnZ0bmVmb3RuYWJvbGZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1NDQ4OTEsImV4cCI6MjExMTEyMDg5MX0.75WXxtok4jANqzOjZ-B20aaPb8rSlb1vWCMM80TKph4","siteUrl":""};
