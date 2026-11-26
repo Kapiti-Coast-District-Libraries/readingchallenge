@@ -10,13 +10,12 @@
   <title>Staff · Summer Reading Challenge</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <script src="./config.js"></script>
-  <script type="module" crossorigin src="./assets/admin-DvNmqJYJ.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-XKyaHtl9.js">
-  <link rel="modulepreload" crossorigin href="./assets/config-DzuDQiF6.js">
-  <link rel="modulepreload" crossorigin href="./assets/events-JEggKWYo.js">
-  <link rel="modulepreload" crossorigin href="./assets/island-geo-BVX2xn_M.js">
-  <link rel="stylesheet" crossorigin href="./assets/config-xBhfDG-8.css">
-  <link rel="stylesheet" crossorigin href="./assets/admin-D2YTQysk.css">
+  <script type="module" crossorigin src="./assets/admin-CiPS-Sd5.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/config-BPCo0lkr.js">
+  <link rel="modulepreload" crossorigin href="./assets/events-DpLdY4Cz.js">
+  <link rel="modulepreload" crossorigin href="./assets/island-geo-FkU5cCB3.js">
+  <link rel="stylesheet" crossorigin href="./assets/config-CGcy0nxq.css">
+  <link rel="stylesheet" crossorigin href="./assets/admin-C0pnYYns.css">
 </head>
 <body class="admin">
   <header class="staff-header no-print">
@@ -228,6 +227,8 @@
           <label class="field"><span class="field-label">Minimum reviews</span><input name="minReviews" type="number" min="0" max="50" value="0" inputmode="numeric" /></label>
           <p class="note field-help">Rewards kids who took the time to write genuine reviews of what they read, not just log minutes.
             Reviews you’ve hidden don’t count, so an unsuitable review never earns a place in the draw.</p>
+          <label class="field"><span class="field-label">Minimum island climbs</span><input name="minClimbs" type="number" min="0" max="1000" placeholder="any" inputmode="numeric" /></label>
+          <p class="note field-help">Climbs to the top of Tūteremoana, as each reader’s Kāpiti Island page counts them. Leave empty for anyone.</p>
         </div>
         <label class="check"><input name="weighted" type="checkbox" /> More minutes = more chances</label>
         <label class="check"><input name="exclude" type="checkbox" checked /> Skip readers who already won a draw</label>
@@ -510,7 +511,7 @@
           <button class="btn btn-primary" type="submit">Add</button>
         </form>
         <p class="note">Books kids find through search are skipped if their title has a blocked word, and reviews with one are flagged
-          “Rude words” for you to check. Words are matched at the start of a word (so “fucking” is caught), and short words only as
+          “Rude words” for you to check. Words are matched at the start of a word (so “idiots” is caught by “idiot”), and short words only as
           a whole word, so “Sussex” is fine. Look-alikes such as <code>sh1t</code>, <code>f.u.c.k</code> and macron tricks are caught too.</p>
         <ul id="wordList" class="word-chips"></ul>
       </div>
@@ -632,11 +633,6 @@
             <h3>How kids are doing</h3>
             <div id="islandStats" class="kpis island-kpis" aria-live="polite"></div>
           </div>
-          <div class="card notice warn-notice island-care">
-            <strong>Before launch:</strong> Kāpiti Island is of great significance to mana whenua (Ngāti Toa Rangatira, Te Āti Awa ki Whakarongotai and others).
-            Check with mana whenua and the library that they’re happy with Kimi’s climb to Tūteremoana. The track is from OpenStreetMap
-            (© OpenStreetMap contributors, ODbL) and the island’s shape from LINZ’s NZ 8m elevation model (CC BY 3.0 NZ); both are credited on every island view.
-          </div>
         </div>
       </div>
     </section>
@@ -714,7 +710,7 @@
                 <label class="field"><span class="field-label">Type it again</span><input id="tagAddressConfirm" type="url" spellcheck="false" /></label>
                 <p class="note">Must start with https:// and end with /. Test it first: it should open the kids’ sign-in page.</p>
                 <p class="note">For safety, only these web hosts are allowed: <strong id="tagHosts"></strong>.
-                  Moving to a new host (say a council website) needs a developer to approve it first, so a stolen staff login can’t point new tags at another site.</p>
+                  Moving to a new address (say a council website) has to be approved by whoever looks after the website first, so a stolen staff login can’t point new tags at another site.</p>
                 <div class="input-row">
                   <button id="tagAddressTest" class="btn btn-small" type="button">Test this address</button>
                   <button class="btn btn-primary btn-small" type="submit">Save new address</button>
@@ -758,6 +754,23 @@
             <div><button id="newSeasonBtn" class="btn btn-small btn-danger" type="button">Start a new season…</button></div>
             <p id="seasonMessage" class="message" role="status"></p>
           </div>
+        </div>
+      </div>
+
+      <div class="card libraries-card">
+        <div class="card-head">
+          <h3>Library posters: the daily bonus</h3>
+          <button id="addLibrary" class="btn btn-small" type="button">Add a library</button>
+        </div>
+        <p class="note">Each library has a poster with a QR code. A signed-in reader who scans it (or types its code on a library computer)
+          gets that library’s bonus minutes, <strong>once a day in total</strong>, whichever library they visit, while the challenge is open.
+          The minutes show in their total and recent list like any other bonus. “New code” makes the old poster stop working.</p>
+        <div class="table-wrap">
+          <table id="librariesTable" class="table">
+            <thead><tr><th scope="col">Library</th><th scope="col">Poster code</th><th scope="col" class="num">Bonus</th><th scope="col">Status</th>
+              <th scope="col" class="num">Visits today</th><th scope="col" class="num">This season</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
+            <tbody></tbody>
+          </table>
         </div>
       </div>
     </section>
