@@ -10,13 +10,13 @@
   <title>Staff · Summer Reading Challenge</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <script src="./config.js"></script>
-  <script type="module" crossorigin src="./assets/admin-CWujl9SN.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-XKyaHtl9.js">
-  <link rel="modulepreload" crossorigin href="./assets/config-BP9vusWK.js">
-  <link rel="modulepreload" crossorigin href="./assets/events-DpLdY4Cz.js">
-  <link rel="modulepreload" crossorigin href="./assets/island-geo-cLSsGu86.js">
+  <script type="module" crossorigin src="./assets/admin-Cv1bZcY1.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/config-BJxkHtqF.js">
+  <link rel="modulepreload" crossorigin href="./assets/events-JEggKWYo.js">
+  <link rel="modulepreload" crossorigin href="./assets/preload-helper-CRzLMJPS.js">
+  <link rel="modulepreload" crossorigin href="./assets/island-geo-BdRoMfJt.js">
   <link rel="stylesheet" crossorigin href="./assets/config-CGcy0nxq.css">
-  <link rel="stylesheet" crossorigin href="./assets/admin-D0-e6SAf.css">
+  <link rel="stylesheet" crossorigin href="./assets/admin-DFuBG8pE.css">
 </head>
 <body class="admin">
   <header class="staff-header no-print">
@@ -30,15 +30,15 @@
     <nav id="tabs" class="tabs hidden" role="tablist" aria-label="Staff sections">
       <button role="tab" type="button" data-tab="today" aria-selected="true">Today</button>
       <button role="tab" type="button" data-tab="reviews" aria-selected="false">Reviews <span id="reviewsBadge" class="tab-badge hidden"></span></button>
-      <button role="tab" type="button" data-tab="desk" aria-selected="false">Desk</button>
-      <button role="tab" type="button" data-tab="prizes" aria-selected="false">Prizes</button>
-      <button role="tab" type="button" data-tab="milestones" aria-selected="false">Milestones</button>
       <button role="tab" type="button" data-tab="readers" aria-selected="false">Readers</button>
-      <button role="tab" type="button" data-tab="events" aria-selected="false">Events</button>
-      <button role="tab" type="button" data-tab="content" aria-selected="false">Content</button>
-      <button role="tab" type="button" data-tab="map" aria-selected="false">Map</button>
-      <button role="tab" type="button" data-tab="wording" aria-selected="false">Wording</button>
-      <button role="tab" type="button" data-tab="island" aria-selected="false">Island</button>
+      <button role="tab" type="button" data-tab="prizes" aria-selected="false">Prizes &amp; badges</button>
+      <span class="tab-gap" aria-hidden="true"></span>
+      <button role="tab" type="button" data-tab="events" aria-selected="false">News &amp; events</button>
+      <button role="tab" type="button" data-tab="bingo" aria-selected="false">Bingo</button>
+      <button role="tab" type="button" data-tab="books" aria-selected="false">Books</button>
+      <button role="tab" type="button" data-tab="map" aria-selected="false">Kimi’s map</button>
+      <span class="tab-gap" aria-hidden="true"></span>
+      <button role="tab" type="button" data-tab="numbers" aria-selected="false">Numbers</button>
       <button role="tab" type="button" data-tab="settings" aria-selected="false">Settings</button>
     </nav>
   </header>
@@ -62,15 +62,32 @@
 
   <main id="adminView" class="staff-main hidden">
 
-    <!-- ===================== TODAY ===================== -->
+
+    <!-- ===================== TODAY: the front desk ===================== -->
     <section data-panel="today" class="panel no-print" aria-labelledby="todayTitle">
       <h2 id="todayTitle" class="sr-only">Today</h2>
+
+      <div class="card finder">
+        <form id="findForm" class="finder-row" autocomplete="off">
+          <label class="sr-only" for="findInput">Scan a tag, or type a reader’s name or note</label>
+          <input id="findInput" class="grow finder-input" placeholder="Scan a tag, or type a name…" spellcheck="false" autocapitalize="off" enterkeyhint="search" />
+          <button id="cameraBtn" class="btn" type="button" aria-pressed="false">📷 Camera</button>
+          <button class="btn btn-sea" type="submit">Find</button>
+        </form>
+        <video id="scanVideo" class="scan-video hidden" playsinline muted></video>
+        <p id="scanMessage" class="message" role="status" aria-live="polite"></p>
+        <ul id="nameResults" class="rows name-results"></ul>
+        <label class="check finder-instant"><input id="instantMode" type="checkbox" /> Quick bonus: add the bonus below straight after each tag scan</label>
+      </div>
+
+      <div id="readerCard" class="reader-card hidden" aria-live="polite"></div>
+
       <div id="todayStats" class="kpis" aria-live="polite"></div>
 
       <div class="grid-2">
         <div class="card">
           <div class="card-head"><h3>Prizes to hand out</h3><span id="todayPrizeCount" class="pill"></span></div>
-          <p class="note">When a winner comes in, scan their tag at the <strong>Desk</strong> to hand it over.</p>
+          <p class="note">Open a winner, then scan their tag to hand it over.</p>
           <ul id="todayPrizes" class="rows"></ul>
           <div class="card-foot"><button class="btn btn-small" type="button" data-goto="prizes">All prizes</button></div>
         </div>
@@ -84,8 +101,7 @@
 
       <div class="card">
         <div class="card-head"><h3>Books kids asked for</h3><span id="todayRequestCount" class="pill"></span></div>
-        <p class="note">Kids who couldn’t find their book typed the title and asked you to add it. They can log it straight away, but nobody else
-          sees it until you decide. Approve it (fixing spelling or capitals), swap it for the same book from the catalogue, or turn it down.</p>
+        <p class="note">Kids who couldn’t find their book asked you to add it. They can log it already; nobody else sees it until you approve it.</p>
         <ul id="todayRequests" class="rows book-rows"></ul>
         <div class="card-foot"><button id="todayAllRequests" class="btn btn-small" type="button">All requests</button></div>
       </div>
@@ -102,16 +118,20 @@
             </select>
           </label>
         </div>
-        <p class="note">Books that weren’t on the starter list that kids have logged: found by searching or by scanning the barcode. Titles with blocked words are already skipped.
-          Hide anything that isn’t right for kids: it disappears from search, favourites, the TV and other kids’ pages.</p>
+        <p class="note">Books from outside the starter list that kids logged. Hide anything that isn’t right for kids.</p>
         <ul id="todayBooks" class="rows book-rows"></ul>
       </div>
 
       <div id="todayDeletedCard" class="card hidden">
         <div class="card-head"><h3>Deleted accounts</h3></div>
-        <p class="note">Kids who deleted their account. Restore within 14 days if it was a mistake or someone else used their tag.</p>
+        <p class="note">Restore within 14 days if it was a mistake or someone else used their tag.</p>
         <ul id="todayDeleted" class="rows"></ul>
       </div>
+
+      <details class="card fold">
+        <summary>Bonus minutes given lately</summary>
+        <ul id="bonusList" class="rows"></ul>
+      </details>
     </section>
 
     <!-- ===================== REVIEWS ===================== -->
@@ -135,81 +155,12 @@
       <ul id="reviewList" class="review-list" aria-live="polite"></ul>
     </section>
 
-    <!-- ===================== DESK ===================== -->
-    <section data-panel="desk" class="panel no-print hidden" aria-label="Desk">
-      <div class="desk">
-        <div class="card desk-scan">
-          <h3>Scan a tag</h3>
-          <form id="scanForm" class="input-row" autocomplete="off">
-            <label class="sr-only" for="scanInput">Tag code</label>
-            <input id="scanInput" class="grow code-input" placeholder="Scan or type a tag code" spellcheck="false" autocapitalize="characters" />
-            <button class="btn btn-sea" type="submit">Find</button>
-          </form>
-          <div class="input-row">
-            <button id="cameraBtn" class="btn btn-small" type="button">Use camera</button>
-            <label class="check"><input id="instantMode" type="checkbox" /> Add the bonus straight after each scan</label>
-          </div>
-          <video id="scanVideo" class="scan-video hidden" playsinline muted></video>
-          <p id="scanMessage" class="message" role="status" aria-live="polite"></p>
-          <div class="find-name">
-            <label class="field-label" for="nameSearch">No tag with them? Find them by name</label>
-            <input id="nameSearch" type="search" placeholder="Type a name or note…" autocomplete="off" spellcheck="false" />
-            <ul id="nameResults" class="rows name-results"></ul>
-          </div>
-        </div>
-
-        <div class="card desk-reader">
-          <div class="reader-head">
-            <div class="grow">
-              <h3 id="awardWho">Nobody selected</h3>
-              <p id="awardInfo" class="muted">Scan a tag, or find someone by name, to give bonus minutes or hand over a prize.</p>
-            </div>
-            <span id="deskBadge" class="pill hidden"></span>
-          </div>
-          <p id="awardMessage" class="message ok" role="status" aria-live="polite"></p>
-
-          <div id="prizePanel" class="desk-section hidden">
-            <p class="field-label">Prizes</p>
-            <ul id="readerPrizes" class="rows"></ul>
-          </div>
-
-          <form id="awardForm" class="desk-section desk-bonus hidden">
-            <p class="field-label">Bonus minutes for…</p>
-            <div class="chips" id="reasonChips"></div>
-            <div class="input-row">
-              <label class="sr-only" for="reasonInput">Reason</label>
-              <input id="reasonInput" class="grow" maxlength="80" placeholder="Or type a reason" />
-              <label class="sr-only" for="bonusInput">Minutes</label>
-              <input id="bonusInput" class="narrow" type="number" min="1" max="300" inputmode="numeric" />
-            </div>
-            <div class="chips" id="bonusChips"></div>
-            <button id="awardBtn" class="btn btn-primary" type="submit" disabled>Add bonus</button>
-          </form>
-
-          <details id="givePrizeBox" class="fold desk-section hidden">
-            <summary>Give this reader a prize</summary>
-            <form id="givePrizeForm" class="input-row" autocomplete="off">
-              <label class="field grow"><span class="field-label">Prize</span><input id="givePrizeInput" maxlength="120" placeholder="e.g. Book voucher" /></label>
-              <label class="field"><span class="field-label">Collect by</span><input id="givePrizeDate" type="date" /></label>
-              <button class="btn btn-sea" type="submit">Give prize</button>
-            </form>
-            <p id="prizeMessage" class="message ok" role="status" aria-live="polite"></p>
-          </details>
-        </div>
-      </div>
-
-      <details class="card fold">
-        <summary>Recent bonus minutes</summary>
-        <ul id="bonusList" class="rows"></ul>
-      </details>
-    </section>
-
-    <!-- ===================== PRIZES ===================== -->
+    <!-- ===================== PRIZES & BADGES ===================== -->
     <section data-panel="prizes" class="panel no-print hidden" aria-label="Prizes">
       <div class="card">
         <div class="card-head"><h3>Waiting to be collected</h3><span id="openCount" class="pill"></span></div>
-        <p class="note">Overdue first. To hand one over, scan the winner’s tag at the <strong>Desk</strong>.
-          To give a prize to one reader, open them at the Desk, or tick readers on the Leaderboard, or give one for a review.</p>
+        <p class="note">Overdue first. To hand one over, open the winner and scan their tag. To give a prize to one reader, find them on
+          <strong>Today</strong>; to several at once, tick them on <strong>Readers</strong>.</p>
         <label class="sr-only" for="prizeFilter">Filter</label>
         <input id="prizeFilter" type="search" placeholder="Filter by name, note or prize…" autocomplete="off" />
         <ul id="openPrizes" class="rows"></ul>
@@ -244,16 +195,14 @@
         <summary>History <span class="muted">· every draw and prize, including cancelled ones</span></summary>
         <div id="drawList" class="history"></div>
       </details>
-    </section>
 
-    <!-- ===================== MILESTONES ===================== -->
-    <section data-panel="milestones" class="panel no-print hidden" aria-labelledby="milestonesTitle">
+      <div class="section-title" id="badges"><h2 id="milestonesTitle">Badges</h2></div>
       <div class="panel-head">
         <div>
-          <h2 id="milestonesTitle">Milestones</h2>
+          <h3 class="sr-only">About badges</h3>
           <p class="note">When a reader reaches a milestone (an hour of reading, five books, a bingo line…), a celebration pops up on their page,
             once: the badge, your message, and a short video, audio clip or picture if you add one. A reward adds bonus minutes, just like a
-            bonus at the Desk. Readers who are already past a milestone when you add it or turn it on get it the next time they open their page.
+            bonus on Today. Readers who are already past a milestone when you add it or turn it on get it the next time they open their page.
             Earned badges stay on their page. Starter milestones come switched off: edit them and turn on the ones you want.</p>
         </div>
         <button id="milestoneNew" class="btn btn-primary" type="button">New milestone</button>
@@ -285,12 +234,7 @@
 
     <!-- ===================== READERS ===================== -->
     <section data-panel="readers" class="panel hidden" aria-label="Readers">
-      <div class="subtabs no-print" role="tablist" aria-label="Readers views">
-        <button type="button" role="tab" data-sub="board" aria-selected="true">Leaderboard</button>
-        <button type="button" role="tab" data-sub="tags" aria-selected="false">Tags &amp; all readers</button>
-      </div>
-
-      <div data-subpanel="board" class="stack no-print">
+      <div class="stack no-print">
         <div class="card">
           <div class="card-head">
             <h3>Leaderboard</h3>
@@ -337,7 +281,7 @@
         </div>
       </div>
 
-      <div data-subpanel="tags" class="stack hidden">
+      <div class="stack">
         <div class="card no-print">
           <h3>Make new tags</h3>
           <div id="siteUrlNote" class="site-url-note"></div>
@@ -382,7 +326,6 @@
           </div>
         </div>
 
-        <div id="readerLogs" class="card no-print hidden"></div>
       </div>
     </section>
 
@@ -415,35 +358,29 @@
           <ul id="eventList" class="rows event-rows"></ul>
         </div>
       </div>
+
+      <div class="section-title" id="news"><h2>News</h2></div>
+      <div class="stack">
+        <form id="newsForm" class="card form-card">
+          <h3>New announcement</h3>
+          <label class="field"><span class="field-label">Title (EN)</span><input name="title_en" maxlength="120" required /></label>
+          <label class="field"><span class="field-label">Body (EN)</span><textarea name="body_en" maxlength="2000" rows="4" required></textarea></label>
+          <label class="field"><span class="field-label">Title (MI, optional)</span><input name="title_mi" maxlength="120" /></label>
+          <label class="field"><span class="field-label">Body (MI, optional)</span><textarea name="body_mi" maxlength="2000" rows="4"></textarea></label>
+          <div id="newsPicture"></div>
+          <label class="check"><input type="checkbox" name="published" checked /> Publish now</label>
+          <div><button class="btn btn-primary" type="submit">Save</button></div>
+        </form>
+        <div class="card">
+          <div class="card-head"><h3>Announcements</h3></div>
+          <ul id="newsList" class="rows"></ul>
+        </div>
+      </div>
     </section>
 
-    <!-- ===================== CONTENT ===================== -->
-    <section data-panel="content" class="panel no-print hidden" aria-label="Content">
-      <div class="subtabs" role="tablist" aria-label="Content">
-        <button type="button" role="tab" data-sub="books" aria-selected="true">Books</button>
-        <button type="button" role="tab" data-sub="bingo" aria-selected="false">Bingo</button>
-        <button type="button" role="tab" data-sub="news" aria-selected="false">News</button>
-        <button type="button" role="tab" data-sub="words" aria-selected="false">Blocked words</button>
-      </div>
-
-      <div data-subpanel="books" class="card">
-        <div class="card-head"><h3>Books</h3><span id="bookCount" class="pill"></span></div>
-        <p class="note">Kids pick books from the catalogue. If theirs isn’t there, they can ask for it: see <strong>Requests</strong>. Hiding a book removes it from search,
-          Community favourites, the TV and other kids’ pages. Kids who already logged it keep their minutes.</p>
-        <div class="toolbar">
-          <div id="bookFilter" class="segmented" role="group" aria-label="Show books">
-            <button type="button" data-filter="read" aria-pressed="true">Read by kids</button>
-            <button type="button" data-filter="new" aria-pressed="false">Found by kids</button>
-            <button type="button" data-filter="hidden" aria-pressed="false">Hidden</button>
-            <button type="button" data-filter="requests" aria-pressed="false">Requests <span id="bookRequestCount" class="seg-count"></span></button>
-            <button type="button" data-filter="all" aria-pressed="false">Whole catalogue</button>
-          </div>
-          <input id="bookSearch" type="search" placeholder="Search title or author…" autocomplete="off" aria-label="Search books" />
-        </div>
-        <ul id="bookList" class="rows book-rows"></ul>
-      </div>
-
-      <div data-subpanel="bingo" class="stack hidden">
+    <!-- ===================== BINGO ===================== -->
+    <section data-panel="bingo" class="panel no-print hidden" aria-label="Bingo">
+      <div class="stack">
         <div class="card">
           <div class="card-head">
             <h3>Bingo challenges</h3>
@@ -488,25 +425,29 @@
           </div>
         </div>
       </div>
+    </section>
 
-      <div data-subpanel="news" class="stack hidden">
-        <form id="newsForm" class="card form-card">
-          <h3>New announcement</h3>
-          <label class="field"><span class="field-label">Title (EN)</span><input name="title_en" maxlength="120" required /></label>
-          <label class="field"><span class="field-label">Body (EN)</span><textarea name="body_en" maxlength="2000" rows="4" required></textarea></label>
-          <label class="field"><span class="field-label">Title (MI, optional)</span><input name="title_mi" maxlength="120" /></label>
-          <label class="field"><span class="field-label">Body (MI, optional)</span><textarea name="body_mi" maxlength="2000" rows="4"></textarea></label>
-          <div id="newsPicture"></div>
-          <label class="check"><input type="checkbox" name="published" checked /> Publish now</label>
-          <div><button class="btn btn-primary" type="submit">Save</button></div>
-        </form>
-        <div class="card">
-          <div class="card-head"><h3>Announcements</h3></div>
-          <ul id="newsList" class="rows"></ul>
+    <!-- ===================== BOOKS ===================== -->
+    <section data-panel="books" class="panel no-print hidden" aria-label="Books">
+      <div class="card">
+        <div class="card-head"><h3>Books</h3><span id="bookCount" class="pill"></span></div>
+        <p class="note">Kids pick books from the catalogue. If theirs isn’t there, they can ask for it (see <strong>Requests</strong>). Hiding a book removes it from search,
+          Community favourites, the TV and other kids’ pages. Kids who already logged it keep their minutes.</p>
+        <div class="toolbar">
+          <div id="bookFilter" class="segmented" role="group" aria-label="Show books">
+            <button type="button" data-filter="read" aria-pressed="true">Read by kids</button>
+            <button type="button" data-filter="new" aria-pressed="false">Found by kids</button>
+            <button type="button" data-filter="hidden" aria-pressed="false">Hidden</button>
+            <button type="button" data-filter="requests" aria-pressed="false">Requests <span id="bookRequestCount" class="seg-count"></span></button>
+            <button type="button" data-filter="all" aria-pressed="false">Whole catalogue</button>
+          </div>
+          <input id="bookSearch" type="search" placeholder="Search title or author…" autocomplete="off" aria-label="Search books" />
         </div>
+        <ul id="bookList" class="rows book-rows"></ul>
       </div>
 
-      <div data-subpanel="words" class="card hidden">
+      <div class="card" id="blockedWords">
+        <div class="card-head"><h3>Blocked words</h3></div>
         <form id="wordForm" class="input-row">
           <label class="field grow"><span class="field-label">Block a word</span>
             <input id="wordInput" pattern="[A-Za-zĀĒĪŌŪāēīōū0-9]{2,40}" title="One word: 2 to 40 letters or numbers, no spaces" required autocomplete="off" /></label>
@@ -552,58 +493,14 @@
         <ol id="storyPages" class="rows story-pages" aria-label="Story pages in order"></ol>
         <div id="storyFiles" class="sb-files" aria-live="polite"></div>
       </div>
-    </section>
 
-    <!-- ===================== WORDING ===================== -->
-    <section data-panel="wording" class="panel no-print hidden" aria-labelledby="wordingTitle">
+      <div class="section-title" id="island"><h2 id="islandTitle">Kimi’s Kāpiti Island climb</h2></div>
       <div class="panel-head">
         <div>
-          <h2 id="wordingTitle">Wording</h2>
-          <p class="note">Every word kids see on their pages and the TV. Change any of it, in English or te reo Māori, and kids see it the
-            next time a page loads. Reset puts the site’s own wording back. Bingo boards, news, events, badges and stops are changed in their own tabs.</p>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-head"><h3>Translation spreadsheet</h3></div>
-        <p class="note">A spreadsheet of everything kids and the TV can show: all the wording below, plus the bingo boards, news, events, badges, Kimi’s stops,
-          bonus reasons, prize names and where events are. Just two columns: the English, and the <strong>te reo Māori</strong> (filled in where there is some already).
-          Give it to a fluent speaker: it opens in Excel, Google Sheets or Numbers, with a “How to” tab that explains everything. Then upload it here (Excel or CSV).
-          Each row is matched by its English, and you’ll see every change before anything is saved.</p>
-        <div class="input-row">
-          <button id="wordingDownload" class="btn btn-small" type="button">Download spreadsheet</button>
-          <label class="btn btn-small btn-sea file-btn">Upload filled spreadsheet
-            <input id="wordingUpload" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.csv,text/csv,.txt,text/plain" class="sr-only" /></label>
-          <button id="wordingDownloadCsv" class="link-btn" type="button">or download as CSV</button>
-        </div>
-        <p id="wordingSheetMessage" class="message ok" role="status"></p>
-      </div>
-
-      <div class="card">
-        <div class="toolbar">
-          <div id="wordingFilter" class="segmented" role="group" aria-label="Show wording">
-            <button type="button" data-filter="all" aria-pressed="true">All <span class="seg-count"></span></button>
-            <button type="button" data-filter="missing" aria-pressed="false">Missing Māori <span class="seg-count"></span></button>
-            <button type="button" data-filter="changed" aria-pressed="false">Changed here <span class="seg-count"></span></button>
-          </div>
-          <div class="input-row wording-find">
-            <label class="sr-only" for="wordingArea">Where</label>
-            <select id="wordingArea"><option value="">Everywhere on the site</option></select>
-            <input id="wordingSearch" type="search" placeholder="Search the wording…" autocomplete="off" aria-label="Search the wording" />
-          </div>
-        </div>
-        <div id="wordingList" class="wording-list" aria-live="polite"></div>
-      </div>
-    </section>
-
-    <!-- ===================== KĀPITI ISLAND CLIMB ===================== -->
-    <section data-panel="island" class="panel no-print hidden" aria-labelledby="islandTitle">
-      <div class="panel-head">
-        <div>
-          <h2 id="islandTitle">Kimi’s Kāpiti Island climb</h2>
+          <h3 class="sr-only">About the island climb</h3>
           <p class="note">Every kid climbs their own Kimi up Kāpiti Island with their own minutes: from the beach at Rangatira, where the boat lands,
             up the Wilkinson Track to the top of Tūteremoana (521 m), then back to the beach for the next climb. Kids see how many times they’ve
-            climbed it and how far up this climb Kimi is, on the island in 3D.</p>
+            climbed it and how far up this climb Kimi is, on a picture of the island from the beach.</p>
         </div>
       </div>
       <div class="grid-2 island-grid">
@@ -639,6 +536,64 @@
       </div>
     </section>
 
+    <!-- ===================== NUMBERS ===================== -->
+    <section data-panel="numbers" class="panel no-print hidden" aria-labelledby="numbersTitle">
+      <div class="panel-head">
+        <div>
+          <h2 id="numbersTitle">Numbers</h2>
+          <p class="note">For reports. Reading by NZ week, library visits, the most-read books. Deleted accounts aren’t counted.</p>
+        </div>
+      </div>
+      <form id="reportForm" class="card toolbar report-dates" autocomplete="off">
+        <div id="reportRange" class="segmented" role="group" aria-label="Dates">
+          <button type="button" data-range="season" aria-pressed="true">Whole challenge</button>
+          <button type="button" data-range="7" aria-pressed="false">Last 7 days</button>
+          <button type="button" data-range="30" aria-pressed="false">Last 30 days</button>
+        </div>
+        <div class="input-row">
+          <label class="field"><span class="field-label">From</span><input id="reportFrom" type="date" /></label>
+          <label class="field"><span class="field-label">To</span><input id="reportTo" type="date" /></label>
+          <button class="btn btn-small" type="submit">Show</button>
+        </div>
+      </form>
+      <div id="reportTotals" class="kpis kpis-4" aria-live="polite"></div>
+      <div class="card">
+        <div class="card-head"><h3>Week by week</h3><button id="reportCsv" class="btn btn-small" type="button">Download this table</button></div>
+        <div class="table-wrap">
+          <table id="reportWeeks" class="table">
+            <thead><tr><th scope="col">Week</th><th scope="col" class="num">Readers</th><th scope="col" class="num">New readers</th><th scope="col" class="num">Minutes read</th>
+              <th scope="col" class="num">Bonus minutes</th><th scope="col" class="num">Sessions</th><th scope="col" class="num">Library visits</th><th scope="col" class="num">Reviews</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><h3>Library visits</h3></div>
+          <div class="table-wrap">
+            <table id="reportLibraries" class="table">
+              <thead><tr><th scope="col">Library</th><th scope="col" class="num">Visits</th><th scope="col" class="num">Readers</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Most-read books</h3></div>
+          <ol id="reportBooks" class="rows report-books"></ol>
+        </div>
+      </div>
+      <div class="card form-card">
+        <h3>Download everything</h3>
+        <p class="note">Spreadsheets (CSV): every reader, every reading entry, every prize. Download them before starting a new season.</p>
+        <div class="input-row">
+          <button id="exportReaders" class="btn btn-small" type="button">Readers</button>
+          <button id="exportLogs" class="btn btn-small" type="button">Reading log</button>
+          <button id="exportPrizes" class="btn btn-small" type="button">Prizes</button>
+        </div>
+        <p id="exportMessage" class="message ok" role="status"></p>
+      </div>
+    </section>
+
     <!-- ===================== SETTINGS ===================== -->
     <section data-panel="settings" class="panel no-print hidden" aria-label="Settings">
       <div class="grid-2 settings-grid">
@@ -656,12 +611,12 @@
             <label class="field"><span class="field-label">New boards: bonus per line</span><input name="bingo_line_bonus" type="number" min="0" max="300" required inputmode="numeric" /></label>
             <label class="field"><span class="field-label">New boards: full card bonus</span><input name="bingo_card_bonus" type="number" min="0" max="1000" required inputmode="numeric" /></label>
           </div>
-          <p class="note">Each bingo board has its own line and full-card bonuses (Content → Bingo). These are the starting amounts for a new blank board.</p>
+          <p class="note">Each bingo board has its own line and full-card bonuses (the <strong>Bingo</strong> tab). These are the starting amounts for a new blank board.</p>
 
           <fieldset class="journey-set">
             <legend>Kimi the Kiwi’s walk</legend>
             <p class="note">Every minute anyone reads moves Kimi the Kiwi along the walk from <span id="journeyStart">the first stop</span>
-              to <span id="journeyFinish">the finish</span> (<span id="journeyKm"></span> km; change the stops on the <strong>Map</strong> tab).
+              to <span id="journeyFinish">the finish</span> (<span id="journeyKm"></span> km; change the stops on <strong>Kimi’s map</strong>).
               Set how fast Kimi walks, or how many minutes of reading it takes to get to the end.</p>
             <div class="pace-modes" role="radiogroup" aria-label="How to set Kimi’s pace">
               <label class="check"><input type="radio" name="journey_mode" value="pace" checked /> Set the pace</label>
@@ -728,24 +683,13 @@
           </div>
 
           <div class="card form-card">
-            <h3>Bonus reasons at the Desk</h3>
+            <h3>Bonus reasons</h3>
             <label for="presetText" class="note">One per line. Add default minutes after a comma, e.g. “Lego club, 20”.</label>
             <textarea id="presetText" rows="6" spellcheck="true"></textarea>
             <div class="input-row">
               <button id="savePresets" class="btn" type="button">Save reasons</button>
               <span id="presetMessage" class="message ok" role="status"></span>
             </div>
-          </div>
-
-          <div class="card form-card">
-            <h3>Download</h3>
-            <p class="note">Spreadsheets (CSV) for reports, or before starting a new season.</p>
-            <div class="input-row">
-              <button id="exportReaders" class="btn btn-small" type="button">Readers</button>
-              <button id="exportLogs" class="btn btn-small" type="button">Reading log</button>
-              <button id="exportPrizes" class="btn btn-small" type="button">Prizes</button>
-            </div>
-            <p id="exportMessage" class="message ok" role="status"></p>
           </div>
 
           <div class="card form-card danger-zone">
@@ -761,19 +705,55 @@
 
       <div class="card libraries-card">
         <div class="card-head">
-          <h3>Library posters: the daily bonus</h3>
+          <h3>Libraries: the daily bonus</h3>
           <button id="addLibrary" class="btn btn-small" type="button">Add a library</button>
         </div>
-        <p class="note">Each library has a poster with a QR code. A signed-in reader who scans it (with “Scan the library poster” in the
-          Library bonus, or their phone’s own camera) gets that library’s bonus minutes, <strong>once a day in total</strong>, whichever library they visit, while the challenge is open.
-          The minutes show in their total and recent list like any other bonus. “New code” makes the old poster stop working.</p>
+        <p class="note">Each library has its own QR code: put it on a poster or sign. A reader who scans it (with “Scan the library poster”
+          on their page, or their phone’s camera) gets that library’s bonus minutes, <strong>once a day in total</strong>, whichever library, while the challenge is open.
+          “New code” makes the old QR code stop working.</p>
         <div class="table-wrap">
           <table id="librariesTable" class="table">
-            <thead><tr><th scope="col">Library</th><th scope="col">Poster code</th><th scope="col" class="num">Bonus</th><th scope="col">Status</th>
+            <thead><tr><th scope="col">Library</th><th scope="col">Code</th><th scope="col" class="num">Bonus</th><th scope="col">Status</th>
               <th scope="col" class="num">Visits today</th><th scope="col" class="num">This season</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
+      </div>
+
+      <div class="section-title" id="wording"><h2 id="wordingTitle">Wording and translations</h2>
+        <p class="note">Every word kids see on their pages and the TV, in English and te reo Māori. Changes show the next time a page loads.
+          Bingo boards, news, events, badges and stops have their own te reo boxes where you edit them.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>Translation spreadsheet</h3></div>
+        <p class="note">A spreadsheet of everything kids and the TV can show: all the wording below, plus the bingo boards, news, events, badges, Kimi’s stops,
+          bonus reasons, prize names and where events are. Just two columns: the English, and the <strong>te reo Māori</strong> (filled in where there is some already).
+          Give it to a fluent speaker: it opens in Excel, Google Sheets or Numbers, with a “How to” tab that explains everything. Then upload it here (Excel or CSV).
+          Each row is matched by its English, and you’ll see every change before anything is saved.</p>
+        <div class="input-row">
+          <button id="wordingDownload" class="btn btn-small" type="button">Download spreadsheet</button>
+          <label class="btn btn-small btn-sea file-btn">Upload filled spreadsheet
+            <input id="wordingUpload" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.csv,text/csv,.txt,text/plain" class="sr-only" /></label>
+          <button id="wordingDownloadCsv" class="link-btn" type="button">or download as CSV</button>
+        </div>
+        <p id="wordingSheetMessage" class="message ok" role="status"></p>
+      </div>
+
+      <div class="card">
+        <div class="toolbar">
+          <div id="wordingFilter" class="segmented" role="group" aria-label="Show wording">
+            <button type="button" data-filter="all" aria-pressed="true">All <span class="seg-count"></span></button>
+            <button type="button" data-filter="missing" aria-pressed="false">Missing Māori <span class="seg-count"></span></button>
+            <button type="button" data-filter="changed" aria-pressed="false">Changed here <span class="seg-count"></span></button>
+          </div>
+          <div class="input-row wording-find">
+            <label class="sr-only" for="wordingArea">Where</label>
+            <select id="wordingArea"><option value="">Everywhere on the site</option></select>
+            <input id="wordingSearch" type="search" placeholder="Search the wording…" autocomplete="off" aria-label="Search the wording" />
+          </div>
+        </div>
+        <div id="wordingList" class="wording-list" aria-live="polite"></div>
       </div>
     </section>
   </main>
