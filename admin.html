@@ -10,12 +10,13 @@
   <title>Staff · Summer Reading Challenge</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <script src="./config.js"></script>
-  <script type="module" crossorigin src="./assets/admin-CiPS-Sd5.js"></script>
-  <link rel="modulepreload" crossorigin href="./assets/config-BPCo0lkr.js">
+  <script type="module" crossorigin src="./assets/admin-CWujl9SN.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-XKyaHtl9.js">
+  <link rel="modulepreload" crossorigin href="./assets/config-BP9vusWK.js">
   <link rel="modulepreload" crossorigin href="./assets/events-DpLdY4Cz.js">
-  <link rel="modulepreload" crossorigin href="./assets/island-geo-FkU5cCB3.js">
+  <link rel="modulepreload" crossorigin href="./assets/island-geo-cLSsGu86.js">
   <link rel="stylesheet" crossorigin href="./assets/config-CGcy0nxq.css">
-  <link rel="stylesheet" crossorigin href="./assets/admin-C0pnYYns.css">
+  <link rel="stylesheet" crossorigin href="./assets/admin-D0-e6SAf.css">
 </head>
 <body class="admin">
   <header class="staff-header no-print">
@@ -91,7 +92,7 @@
 
       <div class="card">
         <div class="card-head">
-          <h3>New books kids found</h3>
+          <h3>New books kids are reading</h3>
           <label class="inline-field"><span class="sr-only">Period</span>
             <select id="recentDays">
               <option value="1">Last 24 hours</option>
@@ -101,7 +102,7 @@
             </select>
           </label>
         </div>
-        <p class="note">Books that weren’t on the starter list, added when a kid searched for them. Titles with blocked words are already skipped.
+        <p class="note">Books that weren’t on the starter list that kids have logged: found by searching or by scanning the barcode. Titles with blocked words are already skipped.
           Hide anything that isn’t right for kids: it disappears from search, favourites, the TV and other kids’ pages.</p>
         <ul id="todayBooks" class="rows book-rows"></ul>
       </div>
@@ -495,6 +496,7 @@
           <label class="field"><span class="field-label">Body (EN)</span><textarea name="body_en" maxlength="2000" rows="4" required></textarea></label>
           <label class="field"><span class="field-label">Title (MI, optional)</span><input name="title_mi" maxlength="120" /></label>
           <label class="field"><span class="field-label">Body (MI, optional)</span><textarea name="body_mi" maxlength="2000" rows="4"></textarea></label>
+          <div id="newsPicture"></div>
           <label class="check"><input type="checkbox" name="published" checked /> Publish now</label>
           <div><button class="btn btn-primary" type="submit">Save</button></div>
         </form>
@@ -507,7 +509,7 @@
       <div data-subpanel="words" class="card hidden">
         <form id="wordForm" class="input-row">
           <label class="field grow"><span class="field-label">Block a word</span>
-            <input id="wordInput" pattern="[A-Za-zĀĒĪŌŪāēīōū0-9]{2,40}" required autocomplete="off" /></label>
+            <input id="wordInput" pattern="[A-Za-zĀĒĪŌŪāēīōū0-9]{2,40}" title="One word: 2 to 40 letters or numbers, no spaces" required autocomplete="off" /></label>
           <button class="btn btn-primary" type="submit">Add</button>
         </form>
         <p class="note">Books kids find through search are skipped if their title has a blocked word, and reviews with one are flagged
@@ -762,8 +764,8 @@
           <h3>Library posters: the daily bonus</h3>
           <button id="addLibrary" class="btn btn-small" type="button">Add a library</button>
         </div>
-        <p class="note">Each library has a poster with a QR code. A signed-in reader who scans it (or types its code on a library computer)
-          gets that library’s bonus minutes, <strong>once a day in total</strong>, whichever library they visit, while the challenge is open.
+        <p class="note">Each library has a poster with a QR code. A signed-in reader who scans it (with “Scan the library poster” in the
+          Library bonus, or their phone’s own camera) gets that library’s bonus minutes, <strong>once a day in total</strong>, whichever library they visit, while the challenge is open.
           The minutes show in their total and recent list like any other bonus. “New code” makes the old poster stop working.</p>
         <div class="table-wrap">
           <table id="librariesTable" class="table">
